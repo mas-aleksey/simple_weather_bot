@@ -25,4 +25,4 @@ jobs:
           cd /home/${{ secrets.REMOTE_USER }}/app
           echo BOT_TOKEN=${{ secrets.BOT_TOKEN }} > .env
           pip install -r requirements.txt
-          python3 src/app.py > log.txt &
+          ps -ef | awk '$8=="python3" {print $2}' | xargs -r kill -SIGINT
