@@ -25,6 +25,4 @@ jobs:
           cd /home/${{ secrets.REMOTE_USER }}/app
           echo BOT_TOKEN=${{ secrets.BOT_TOKEN }} > .env
           pip install -r requirements.txt
-          echo "python3 src/app.py > log.txt &" > run.sh
-          chmod +x run.sh
-          ./run.sh
+          nohup python3 src/app.py > nohup.out 2> nohup.err < /dev/null &
