@@ -1,0 +1,26 @@
+name: Deploy
+
+on: [push]
+
+jobs:
+  build:
+
+    name: Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Deploy to Server
+      uses: easingthemes/ssh-deploy@main
+      with:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        ARGS: "-rlgoDzvc -i --delete"
+        REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+        REMOTE_USER: ${{ secrets.REMOTE_USER }}
+        TARGET: "/home/${{ secrets.REMOTE_USER }}/app"
+        EXCLUDE: ".git/*,.github/*,.gitignore"
+        SCRIPT_BEFORE: |
+          ps -ef | awk '$8=="python3" {print $2}' | xargs -r kill -SIGINT
+        SCRIPT_AFTER: |
+          pip install -r requirements.txt
+          python3 app.py > log.txt &
