@@ -40,7 +40,7 @@ async def get_weather(city) -> str:
             if weather:
                 result += weather.text + "°C"
             else:
-                return "Не удалось получить погоду"
+                return "Не удалось получить погоду в городе " + city
             return result
 
 

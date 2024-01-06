@@ -20,9 +20,11 @@ jobs:
         TARGET: "/home/${{ secrets.REMOTE_USER }}/app"
         EXCLUDE: ".git/*,.github/*,.gitignore"
         SCRIPT_BEFORE: |
+          ps
           ps -ef | awk '$8=="python3" {print $2}' | xargs -r kill -SIGINT
         SCRIPT_AFTER: |
           cd /home/${{ secrets.REMOTE_USER }}/app
           echo BOT_TOKEN=${{ secrets.BOT_TOKEN }} > .env
           pip install -r requirements.txt
           nohup python3 src/app.py > nohup.out 2> nohup.err < /dev/null &
+          ps
